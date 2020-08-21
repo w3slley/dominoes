@@ -33,6 +33,7 @@ function onClick(e){
   if(play.result){
     let tileRemoved: Tile = game.player.hand.removeTile(tile);
     game.board.makePlay(tileRemoved,play.side);
+    console.log(game)
     updateBoard();
     updatePlayerTiles();
   }
@@ -42,7 +43,6 @@ function onClick(e){
 function updateBoard(){
   //update div with board every time a tile is added to it!
   boardTiles.innerHTML = '';
-  console.log(game.board)
   for(let i=0;i<game.board.size();i++){
     let t = document.createElement('small');
     if(game.board.get(i).isDouble())
@@ -56,7 +56,6 @@ function updateBoard(){
 
 function updatePlayerTiles(){
   playerTiles.innerHTML = '';
-  console.log(game)
   for(let i=0;i<game.player.getHand().size();i++){
     let t = document.createElement('small');
 
