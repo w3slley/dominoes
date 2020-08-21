@@ -1,22 +1,24 @@
-export class Deck {
-    constructor() {
+var Deck = (function () {
+    function Deck() {
         this.tiles = [];
     }
-    get(pos) {
+    Deck.prototype.get = function (pos) {
         return this.tiles[pos];
-    }
-    addTile(t) {
+    };
+    Deck.prototype.addTile = function (t) {
         this.tiles.push(t);
-    }
-    removeFirstTile() {
-        let removed = this.tiles[0];
+    };
+    Deck.prototype.removeFirstTile = function () {
+        var removed = this.tiles[0];
         this.tiles.splice(0, 1);
         return removed;
-    }
-    sortTiles() {
-        this.tiles = this.tiles.sort(() => Math.random() - 0.5);
-    }
-    size() {
+    };
+    Deck.prototype.sortTiles = function () {
+        this.tiles = this.tiles.sort(function () { return Math.random() - 0.5; });
+    };
+    Deck.prototype.size = function () {
         return this.tiles.length;
-    }
-}
+    };
+    return Deck;
+}());
+export { Deck };

@@ -1,18 +1,18 @@
-export class Player {
-    constructor(name) {
+var Player = (function () {
+    function Player(name) {
         this.name = name;
     }
-    //giveUp()
-    //getHand()
-    passTurn() {
-    }
-    equal(p) {
-        return this.name == p.name; //later I'll have to think on a more precise comparison between players
-    }
-    getHand() {
+    Player.prototype.passTurn = function () {
+    };
+    Player.prototype.equal = function (p) {
+        return this.name == p.name;
+    };
+    Player.prototype.getHand = function () {
         return this.hand;
-    }
-    setHand(hand) {
+    };
+    Player.prototype.setHand = function (hand) {
         this.hand = hand;
-    }
-}
+    };
+    return Player;
+}());
+export { Player };

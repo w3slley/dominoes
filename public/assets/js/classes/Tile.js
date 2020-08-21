@@ -1,45 +1,43 @@
-export class Tile {
-    constructor(horizontalUnicode) {
-        //CONSTANTS
+var Tile = (function () {
+    function Tile(horizontalUnicode) {
         this.horizontalStart = 127025;
         this.verticalStart = 127075;
-        this.unknown = '&#127074;'; //unicode for unknown domino tile (useful for opponent)
+        this.unknown = '&#127074;';
         this.isFlipped = false;
-        this.horizontalUnicode = horizontalUnicode; //saving vertical unicode
-        this.getValues(); //assigning values from the vertical unicode string.
-        this.verticalUnicode = this.getVerticalUnicode(); //saving horizontal unicode
-        this.flippedHorizontalUnicode = this.getFlippedHorizontalUnicode(); //saving flipped horizontal unicode
+        this.horizontalUnicode = horizontalUnicode;
+        this.getValues();
+        this.verticalUnicode = this.getVerticalUnicode();
+        this.flippedHorizontalUnicode = this.getFlippedHorizontalUnicode();
     }
-    getHorizontalUnicode() {
+    Tile.prototype.getHorizontalUnicode = function () {
         if (!this.isFlipped)
             return this.horizontalUnicode;
         else
             return this.flippedHorizontalUnicode;
-    }
-    flipHorizontally() {
+    };
+    Tile.prototype.flipHorizontally = function () {
         this.isFlipped = !this.isFlipped;
-        //switching first and last values
-        let tmp = this.first;
+        var tmp = this.first;
         this.first = this.last;
         this.last = tmp;
-    }
-    getValues() {
-        let diff = this.getNumFromUnicode(this.horizontalUnicode) - this.horizontalStart;
-        for (let a = 0; a <= 6; a++) {
-            for (let b = 0; b <= 6; b++) {
+    };
+    Tile.prototype.getValues = function () {
+        var diff = this.getNumFromUnicode(this.horizontalUnicode) - this.horizontalStart;
+        for (var a = 0; a <= 6; a++) {
+            for (var b = 0; b <= 6; b++) {
                 if ((7 * a + b) === diff) {
                     this.first = a;
                     this.last = b;
                 }
             }
         }
-    }
-    getVerticalUnicode() {
-        let n = this.verticalStart + 7 * this.first + this.last;
+    };
+    Tile.prototype.getVerticalUnicode = function () {
+        var n = this.verticalStart + 7 * this.first + this.last;
         return "&#" + n + ';';
-    }
-    getFlippedHorizontalUnicode() {
-        let n;
+    };
+    Tile.prototype.getFlippedHorizontalUnicode = function () {
+        var n;
         if (this.last === this.first)
             return null;
         if (this.last > this.first)
@@ -47,16 +45,16 @@ export class Tile {
         else if (this.last < this.first)
             n = this.getNumFromUnicode(this.horizontalUnicode) - 6 * (this.first - this.last);
         return '&#' + n + ';';
-    }
-    //Methods that perform comparison between tiles
-    isDouble() {
+    };
+    Tile.prototype.isDouble = function () {
         return this.first == this.last;
-    }
-    isEqual(t) {
-        //if two tiles have the same first and last values they are equal. If they have a first value equal to its last, they are also equal (it's the same piece)
+    };
+    Tile.prototype.isEqual = function (t) {
         return (this.first == t.first && this.last == t.last) || (this.first == t.last && this.last == t.first);
-    }
-    getNumFromUnicode(unicode) {
-        return +unicode.match(/\d/g).join(""); //uses regex to get all digits and combines them with "", ultimately returning only digits.
-    }
-}
+    };
+    Tile.prototype.getNumFromUnicode = function (unicode) {
+        return +unicode.match(/\d/g).join("");
+    };
+    return Tile;
+}());
+export { Tile };
