@@ -3,27 +3,26 @@ import { Hand } from './Hand.js';
 import { Deck } from './Deck.js';
 import { Board } from './Board.js';
 var Game = (function () {
-    function Game(p1, p2) {
+    function Game(players) {
+        this.numPlayers = 2;
+        this.tilesPerPlayer = 8;
         this.board = new Board();
         this.deck = new Deck();
         this.generateAllTiles();
         this.deck.sortTiles();
-        this.player = p1;
-        this.computer = p2;
-        var h1 = new Hand();
-        var h2 = new Hand();
-        for (var i = 0; i < 8; i++) {
-            h1.addTile(this.deck.removeFirstTile());
-            h2.addTile(this.deck.removeFirstTile());
-        }
-        this.player.setHand(h1);
-        this.computer.setHand(h2);
+        this.players = players;
+        this.setPlayersHand();
     }
-    Game.prototype.getBoard = function () {
-        return this.board;
+    Game.prototype.passTurn = function () {
     };
-    Game.prototype.getDeck = function () {
-        return this.deck;
+    Game.prototype.setPlayersHand = function () {
+        for (var i = 0; i < this.numPlayers; i++) {
+            var h = new Hand();
+            for (var i_1 = 0; i_1 < this.tilesPerPlayer; i_1++) {
+                h.addTile(this.deck.removeFirstTile());
+            }
+            this.players[i].setHand(h);
+        }
     };
     Game.prototype.generateAllTiles = function () {
         for (var i = 0, j = 0; j < 28; i++, j++) {

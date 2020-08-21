@@ -1,5 +1,5 @@
-import { Game } from './classes/Game.js';
-import { Player } from './classes/Player.js';
+import { Game } from '../classes/Game.js';
+import { Player } from '../classes/Player.js';
 import { createPlayersHand } from './lib/aux.js';
 var p1 = new Player('Weslley');
 var pc = new Player('Computer');

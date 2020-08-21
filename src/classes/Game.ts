@@ -5,36 +5,44 @@ import {Board} from './Board.js';
 import {Player} from './Player.js';
 
 export class Game{
+  //Public attributes
   public board: Board;
   public deck: Deck;
-  public player: Player;
-  public computer: Player;
+  public players: Player[];
   public turn: Player;
 
-  constructor(p1: Player, p2: Player){
+  //Private attributes
+  private numPlayers: number = 2; //number of players playing the game
+  private tilesPerPlayer: number = 8; //number of domino tiles distributed to each player
+
+  constructor(players: Player[]){
     this.board = new Board();
     this.deck = new Deck();
     this.generateAllTiles();
     this.deck.sortTiles();
     //Adding players
-    this.player = p1;
-    this.computer = p2;
-    //setting player's hand
-    let h1: Hand = new Hand();
-    let h2: Hand = new Hand();
-    for(let i=0;i<8;i++){
-      h1.addTile(this.deck.removeFirstTile());
-      h2.addTile(this.deck.removeFirstTile());
+    this.players = players;
+
+    //setting hand for each player
+    this.setPlayersHand();
+
+  }
+
+  //Method that updates the turn attribute (I'll implement something similar to a circular linked list for more than two players)
+  public passTurn(): void{
+
+  }
+
+  private setPlayersHand(): void{
+    for(let i=0;i<this.numPlayers;i++){//loop through all players
+      let h: Hand = new Hand();
+      for(let i=0;i<this.tilesPerPlayer;i++){//give the right amount of tiles to each of them
+        h.addTile(this.deck.removeFirstTile());
+      }
+      this.players[i].setHand(h); //set their domino hand
     }
-    this.player.setHand(h1);
-    this.computer.setHand(h2);
   }
-  public getBoard(): Board{
-    return this.board;
-  }
-  public getDeck(): Deck{
-    return this.deck;
-  }
+
   private generateAllTiles(): void{
     for(let i=0,j=0;j<28;i++,j++){
       let num: number = 127025+i;

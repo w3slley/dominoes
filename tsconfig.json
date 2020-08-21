@@ -6,7 +6,8 @@
     "es2015",
     "dom"
   ],
-  "removeComments": true
+  "removeComments": true,
+  "outDir": "public/assets/js"
 },
-"include": ["public/assets/js/main.ts"]
+"include": ["src/singleplayer/main.ts"]
 }

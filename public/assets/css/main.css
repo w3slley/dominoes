@@ -8,7 +8,7 @@ small{
 }
 .computer{
   position: relative;
-  top: 0;
+  top: 30px;
   left: 0;
   width: 100%;
   height: 200px;
@@ -16,14 +16,14 @@ small{
 }
 .board{
   position: relative;
-  margin: 0 auto;
+  margin: 150px auto;
   width: 100%;
 }
 .player{
   position: absolute;
-  bottom: 0;
+  bottom: 30px;
   left: 0;
   width: 100%;
-  height: 200px;
+  height: auto;
   text-align: center;
 }
