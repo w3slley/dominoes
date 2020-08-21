@@ -34,19 +34,18 @@ export class Board{
       this.addRight(tile);
       return true;
     }
-    else{
+    else{//When users can choose the side, this else code will never be executed (there can only be two valid plays: left and right!). Right now it is because I didn't implement it yet.
       if(this.left != null && tile.last != this.left){
         tile.flipHorizontally();
       }
-
+      //temporarily adding to the left
       this.left = tile.first; //updating left and right value with current tile
-      this.right = tile.last;
       this.addLeft(tile);
       return true;
     }
   }
 
-  public isValid(tile: Tile): {result: boolean, side: string}{
+  public isMoveValid(tile: Tile): {result: boolean, side: string}{
     if(this.left === null && this.right === null)
       return {result: true, side: 'both'};
     else{

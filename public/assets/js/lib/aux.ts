@@ -29,7 +29,7 @@ function createPlayersHand(){
 function onClick(e){
   let element = e.currentTarget as HTMLTextAreaElement;//currentTarget has to have a type HTMLTextAreaElement (Not all element with type HTMLElement has the method getAttribute() - that's why I was getting that error)
   let tile = new Tile(element.getAttribute('unicode'));
-  let play = game.board.isValid(tile);
+  let play = game.board.isMoveValid(tile);
   if(play.result){
     let tileRemoved: Tile = game.player.hand.removeTile(tile);
     game.board.makePlay(tileRemoved,play.side);
