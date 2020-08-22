@@ -77,7 +77,7 @@ function updateComputerTiles(){
   for(let i=0;i<game.players[1].hand.size();i++){
     let t = document.createElement('small');
     t.classList.add('vertical');
-    t.innerHTML = game.players[1].hand.get(i).verticalUnicode;
+    t.innerHTML = game.players[1].hand.get(i).unknown;
     computerTiles.appendChild(t);
   }
 }
