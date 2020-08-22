@@ -6,13 +6,14 @@ import {game} from './main.js';
 //to generalize a computer move for multiple users (non-player), this function could become a method inside the player class taking as input a game object and the id of the player (right now is only the array index but later could become a more unique number)
 async function computerMove(){
   //This is the straighforward approach. I need to think about how to make the computer moves more intelligent.
-  let computerHand: Hand  = game.players[1].hand;
+  let computerHand: Hand  = game.getTurn().hand;
   for(let i=0;i<computerHand.size();i++){
     let tile: Tile = computerHand.get(i);
     let computerPlay = game.board.isMoveValid(tile);
 
     if(computerPlay.result){//if it's a valid tile
       await playTile(tile);
+      game.passTurn();
       return;
     }
   }
@@ -35,9 +36,11 @@ async function computerMove(){
       await playTile(tile);
     }
   }
-  else
+  else{
     alert('Computer doesn\'t have any tiles to play and deck is empty!');
 
+  }
+  game.passTurn(); //pass turn at the end
 }
 
 //Functions that return promises that sleep for 2 seconds so that computer move is not instantaneous

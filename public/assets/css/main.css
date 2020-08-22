@@ -52,6 +52,7 @@ body{
 }
 .buttons{
   display: flex;
+  height: 50px;
 }
 .left, .right{
   font-size: 18px;
@@ -63,12 +64,32 @@ body{
   border-radius: 2px;
   cursor: pointer;
 }
+.left{
+  position: absolute;
+  left: 0;
+}
+.right{
+  position: absolute;
+  right: 0;
+}
 .deck{
   display: none;
   margin: 0 auto;
   padding: 5px;
   width: auto;
   background-color: red;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.pass-turn{
+  display: none;
+  margin: 0 auto;
+  padding: 5px;
+  width: auto;
+  background-color: green;
   color: white;
   text-align: center;
   cursor: pointer;

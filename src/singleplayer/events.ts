@@ -1,5 +1,6 @@
 import {Tile} from '../classes/Tile.js';
-import {playerMove, clearAndReturnButtonsDiv} from './player.js';
+import {playerMove, getTileFromDeck, passTurn} from './player.js';
+import {computerMove} from './computer.js';
 import {game, playerTiles, computerTiles, boardTiles} from './main.js';
 
 //Methods that create components of the app
@@ -12,22 +13,22 @@ function createBoard(): void{
 }
 
 function createPlayersHand(): void{
-  //players[0] is the user and players[1] is the computer (I need to systematize this later) - add player tag on divs of every player and loop through it.
-  for(let i=0;i<game.players[0].hand.size();i++){
+  //systematize this function to n players!
+  for(let i=0;i<game.getPlayer().hand.size();i++){
     //Creating domino tags
     let tilePlayer = document.createElement('small');
     let tileComputer = document.createElement('small');
 
     //Adding unicode attribute on small tags
-    tilePlayer.setAttribute('unicode',game.players[0].hand.get(i).getHorizontalUnicode());
-    tileComputer.setAttribute('unicode',game.players[1].hand.get(i).getHorizontalUnicode());
+    tilePlayer.setAttribute('unicode',game.getPlayer().hand.get(i).getHorizontalUnicode());
+    tileComputer.setAttribute('unicode',game.getComputer().hand.get(i).getHorizontalUnicode());
 
     //Adding click event listener on player's tiles
-    tilePlayer.addEventListener('click', onTileClick);
+    tilePlayer.addEventListener('click', selectTile);
 
     //Inserting tile unicode into tags
-    tilePlayer.innerHTML = game.players[0].hand.get(i).verticalUnicode;
-    tileComputer.innerHTML = game.players[1].hand.get(i).unknown;
+    tilePlayer.innerHTML = game.getPlayer().hand.get(i).verticalUnicode;
+    tileComputer.innerHTML = game.getComputer().hand.get(i).unknown;
 
     //adding orientation as class for styling
     tilePlayer.classList.add('vertical');
@@ -36,10 +37,13 @@ function createPlayersHand(): void{
     //appending domino tags into divs
     playerTiles.appendChild(tilePlayer);
     computerTiles.appendChild(tileComputer);
-
-    //initialize deck div
-    updateDeck();
   }
+  //create pass turn btn
+  createPassTurnBtn();
+
+  //initialize deck div
+  updateDeck();
+
 }
 
 //Update methods
@@ -62,22 +66,22 @@ function updateBoard(): void{
 
 function updatePlayerTiles(): void{
   playerTiles.innerHTML = '';
-  for(let i=0;i<game.players[0].hand.size();i++){
+  for(let i=0;i<game.getPlayer().hand.size();i++){
     let t = document.createElement('small');
-    t.addEventListener('click', onTileClick);
-    t.setAttribute('unicode',game.players[0].hand.get(i).getHorizontalUnicode());
+    t.addEventListener('click', selectTile);
+    t.setAttribute('unicode',game.getPlayer().hand.get(i).getHorizontalUnicode());
     t.classList.add('vertical');
-    t.innerHTML = game.players[0].hand.get(i).verticalUnicode;
+    t.innerHTML = game.getPlayer().hand.get(i).verticalUnicode;
     playerTiles.appendChild(t);
   }
 }
 
 function updateComputerTiles(){
   computerTiles.innerHTML = '';
-  for(let i=0;i<game.players[1].hand.size();i++){
+  for(let i=0;i<game.getComputer().hand.size();i++){
     let t = document.createElement('small');
     t.classList.add('vertical');
-    t.innerHTML = game.players[1].hand.get(i).unknown;
+    t.innerHTML = game.getComputer().hand.get(i).unknown;
     computerTiles.appendChild(t);
   }
 }
@@ -85,12 +89,19 @@ function updateComputerTiles(){
 function updateDeck(): void{
   let deck: HTMLDivElement = document.querySelector('.deck');
   deck.style.display = 'block';
-  deck.addEventListener('click', onDeckClick);
+  deck.addEventListener('click', getTileFromDeck);
   deck.innerHTML = `Deck (${game.deck.size()})`;
 }
 
+function createPassTurnBtn(): void{
+  let div: HTMLElement = document.querySelector('.pass-turn');
+  div.innerHTML = 'Pass turn';
+  div.addEventListener('click', passTurn);
+  div.style.display = 'block';
+}
+
 //Event listeners
-function onTileClick(e: MouseEvent): void{
+function selectTile(e: MouseEvent): void{
   let btn: Element = clearAndReturnButtonsDiv();
 
   let element = e.currentTarget as HTMLElement;//currentTarget has to have a type HTMLElement (Not all element with type HTMLElement has the method getAttribute() - that's why I was getting that error)
@@ -125,13 +136,13 @@ function onTileClick(e: MouseEvent): void{
   }
 }
 
-//When request for more tiles from the deck is made
-function onDeckClick(e: MouseEvent){
-  let tile: Tile = game.deck.removeFirstTile();//remove tile from deck
-  game.players[0].hand.addTile(tile);//add tile to player's hand
-  updatePlayerTiles();//update hand
-  updateDeck();
+
+function clearAndReturnButtonsDiv(): Element{
+  let className: string = 'buttons';
+  let btnDiv: HTMLElement = document.querySelector('.'+className);
+  btnDiv.innerHTML = '';
+  return btnDiv;
 }
 
 
-export {createPlayersHand, updatePlayerTiles, updateComputerTiles, updateBoard, updateDeck};
+export {createPlayersHand, updatePlayerTiles, updateComputerTiles, updateBoard, updateDeck, clearAndReturnButtonsDiv};

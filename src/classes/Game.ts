@@ -10,11 +10,11 @@ export class Game{
   public board: Board;
   public deck: Deck;
   public players: Player[];
-  public turn: Player;
 
   //Private attributes
   private numPlayers: number = 2; //number of players playing the game
-  private tilesPerPlayer: number = 3; //number of domino tiles distributed to each player
+  private tilesPerPlayer: number = 4; //number of domino tiles distributed to each player
+  private turnIndex: number; //stores index of player in the players array that has to play now
 
   constructor(players: Player[]){
     this.board = new Board();
@@ -27,11 +27,25 @@ export class Game{
     //setting hand for each player
     this.setPlayersHand();
 
+    //choosing a random player (turn initial value is a number between 0 and players.length) to start game
+    this.turnIndex = Math.floor(Math.random()*this.players.length);
+  }
+  public getPlayer(): Player{
+    return this.players[0];
+  }
+  public getComputer(): Player{
+    return this.players[1];
+  }
+  //Method that updates the turn attribute
+  public passTurn(): void{
+    if(this.turnIndex == this.players.length - 1)
+      this.turnIndex = 0;
+    else
+      this.turnIndex++;
   }
 
-  //Method that updates the turn attribute (I'll implement something similar to a circular linked list for more than two players)
-  public passTurn(): void{
-
+  public getTurn(): Player{
+    return this.players[this.turnIndex];
   }
 
   private setPlayersHand(): void{

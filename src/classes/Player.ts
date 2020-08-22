@@ -1,13 +1,19 @@
 import {Hand} from './Hand.js';
 
 export class Player{
+  private playerId: number;
   private name: string;
   private type: string;
   public hand: Hand;
 
-  constructor(name: string, type: string){
+  constructor(playerId: number, name: string, type: string){
+    this.playerId = playerId;
     this.name = name;
     this.type = type;
+  }
+  
+  public getPlayerId(): number{
+    return this.playerId;
   }
 
   public getName(): string{
@@ -18,7 +24,7 @@ export class Player{
     this.hand = hand;
   }
 
-  equal(p: Player): boolean{
-    return this.name == p.name; //later I'll have to think on a more precise comparison between players
+  isEqual(p: Player): boolean{
+    return this.playerId == p.playerId; //later I'll have to think on a more precise comparison between players
   }
 }
