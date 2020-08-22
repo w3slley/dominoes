@@ -6,6 +6,7 @@ import {Player} from './Player.js';
 
 export class Game{
   //Public attributes
+  public gameId: string; //will be useful for multiplayer mode
   public board: Board;
   public deck: Deck;
   public players: Player[];
@@ -13,7 +14,7 @@ export class Game{
 
   //Private attributes
   private numPlayers: number = 2; //number of players playing the game
-  private tilesPerPlayer: number = 8; //number of domino tiles distributed to each player
+  private tilesPerPlayer: number = 3; //number of domino tiles distributed to each player
 
   constructor(players: Player[]){
     this.board = new Board();

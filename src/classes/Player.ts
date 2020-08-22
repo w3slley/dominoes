@@ -2,10 +2,12 @@ import {Hand} from './Hand.js';
 
 export class Player{
   private name: string;
+  private type: string;
   public hand: Hand;
 
-  constructor(name: string){
+  constructor(name: string, type: string){
     this.name = name;
+    this.type = type;
   }
 
   public getName(): string{

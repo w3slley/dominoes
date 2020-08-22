@@ -17,14 +17,21 @@ export class Board{
     return this.tiles;
   }
 
-  public makePlay(tile: Tile, side: string): boolean{
+  public makePlay(tile: Tile, side: string): void{
+    //For the initial play, set left and right with the values from tile and add left (array was empty before, so it doesn't really matter)
+    if(this.right === null && this.left === null){
+      this.left = tile.first;
+      this.right = tile.last;
+      this.addLeft(tile);
+      return;
+    }
+
     if(side === 'left'){
       if(tile.last != this.left)
         tile.flipHorizontally();
 
       this.left = tile.first;//updating left value with current tile
       this.addLeft(tile);
-      return true;
     }
     else if(side === 'right'){
       if(this.right != null && tile.first != this.right)
@@ -32,25 +39,14 @@ export class Board{
 
       this.right = tile.last; //pdating right value with current tile
       this.addRight(tile);
-      return true;
     }
-    else{//When users can choose the side, this else code will never be executed (there can only be two valid plays: left and right). Right now it is because I didn't implement the buttons yet.
+    else{//Code only executed while adding computer tile that can be played both left and right (it's added to the left of the board by default and I'll change it later)
       if(this.left != null && tile.last != this.left){
         tile.flipHorizontally();
       }
 
-      if(this.left == null && this.right == null){//only for the first move (even this will be removed later)
-        //updating left and right value with current tile
-        this.left = tile.first;
-        this.right = tile.last;
-      }
-      else{
-        //temporarily adding to the left
-        this.left = tile.first;
-      }
-
+      this.left = tile.first;
       this.addLeft(tile);
-      return true;
     }
   }
 

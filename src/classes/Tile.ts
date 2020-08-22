@@ -65,7 +65,6 @@ export class Tile{
       n = this.getNumFromUnicode(this.horizontalUnicode) - 6*(this.first - this.last);
 
     return '&#'+n+';';
-
   }
 
   //Methods that perform comparison between tiles
@@ -73,13 +72,14 @@ export class Tile{
     return this.first == this.last;
   }
 
+  //Method that compares whether two domino tiles are the same
+  //If two tiles have the same first and last values they are equal. If they have a first value equal to its last, they are also equal (it's the same piece)
   public isEqual(t: Tile): boolean{
-    //if two tiles have the same first and last values they are equal. If they have a first value equal to its last, they are also equal (it's the same piece)
     return (this.first == t.first && this.last == t.last) || (this.first == t.last && this.last == t.first);
   }
 
   private getNumFromUnicode(unicode: string): number{
-    return +unicode.match(/\d/g).join("");//uses regex to get all digits and combines them with "", ultimately returning only digits.
+    return +unicode.match(/\d/g).join("");//uses regex to get all digits and combines them with ""(default is to combine with commas), ultimately returning only digits.
   }
 
 }

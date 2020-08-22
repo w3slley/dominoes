@@ -2,10 +2,26 @@ body{
   margin: 0;
   height: 100vh;
 }
-small{
-  font-size:90px;
+.vertical{
+  margin: -10px;
+}
+.horizontal{
+  margin: 3px;
+}
+.computer small{
+  font-size:60px;
   cursor: default;
 }
+.player small{
+  font-size:100px;
+  cursor: pointer;
+}
+
+.board small{
+  font-size:50px;
+  cursor: default;
+}
+
 .computer{
   position: relative;
   top: 30px;
@@ -23,7 +39,37 @@ small{
   position: absolute;
   bottom: 30px;
   left: 0;
-  width: 100%;
-  height: auto;
+  margin: 0 auto;
+  width: 80%;
   text-align: center;
+}
+.player-buttons{
+  position: absolute;
+  width: 200px;
+  bottom: 50px;
+  right: 10px;
+}
+.buttons{
+  display: flex;
+}
+.left, .right{
+  font-size: 18px;
+  margin: 5px;
+  padding: 5px;
+  border: none;
+  background-color: #262626;
+  color: white;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.deck{
+  display: none;
+  margin: 0 auto;
+  padding: 5px;
+  width: auto;
+  background-color: red;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
 }
