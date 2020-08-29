@@ -1,3 +1,4 @@
 *.txt
+*.webp
 node_modules
 public/assets/js/

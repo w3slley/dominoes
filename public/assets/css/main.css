@@ -3,59 +3,96 @@ body{
   height: 100vh;
 }
 .vertical{
-  margin: -10px;
+  margin: 0 -5px;
 }
 .horizontal{
-  margin: 3px;
+  margin: -8px 3px;
 }
-.computer small{
-  font-size:60px;
+.computer1 small, .computer2 small, .computer3 small{
+  font-size:40px;
   cursor: default;
 }
-.player small{
+.user small{
   font-size:100px;
   cursor: pointer;
 }
 
-.board small{
-  font-size:50px;
+.board .vertical{
+  margin: 0 -7px;
+  font-size:40px;
+  cursor: default;
+}
+.board .horizontal{
+  margin: 0 1px;
+  font-size:40px;
   cursor: default;
 }
 
-.computer{
-  position: relative;
-  top: 30px;
+.computer1{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100%;
+  text-align: center;
+}
+
+.computer2{
+  position: absolute;
+  top: 10px;
   left: 0;
   width: 100%;
-  height: 200px;
+  height: 100px;
+  text-align: center;
+}
+
+.computer3{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100%;
   text-align: center;
 }
 .board{
-  position: relative;
-  margin: 150px auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   width: 100%;
+  height: 300px;
   text-align: center;
 }
-.player{
+.user{
   position: absolute;
   bottom: 30px;
-  left: 0;
-  margin: 0 auto;
-  width: 80%;
+  width: 100%;
   text-align: center;
+  overflow-x: auto;
 }
 .player-buttons{
+  z-index: 1;
   position: absolute;
-  width: 200px;
+  width: 150px;
   bottom: 50px;
   right: 10px;
 }
 .buttons{
   display: flex;
-  height: 50px;
+  height: 70px;
 }
 .left, .right{
-  font-size: 18px;
+  font-size: 12px;
   margin: 5px;
   padding: 5px;
   border: none;

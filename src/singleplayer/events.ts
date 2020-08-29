@@ -1,54 +1,67 @@
 import {Tile} from '../classes/Tile.js';
+import {Hand} from '../classes/Hand.js';
+import {Player} from '../classes/Player.js';
 import {playerMove, getTileFromDeck, passTurn} from './player.js';
-import {computerMove} from './computer.js';
-import {game, playerTiles, computerTiles, boardTiles} from './main.js';
+import {game} from './main.js';
 
-//Methods that create components of the app
 
-//creates board and player divs (implement later)
+/*
+//Methods that create/update components of the app
+*/
+
 function createBoard(): void{
-  for(let i=0;i<game.players.length;i++){
-
-  }
-}
-
-function createPlayersHand(): void{
   //systematize this function to n players!
-  for(let i=0;i<game.getPlayer().hand.size();i++){
-    //Creating domino tags
-    let tilePlayer = document.createElement('small');
-    let tileComputer = document.createElement('small');
+  let boardDiv: HTMLElement = document.createElement('div');
+  boardDiv.classList.add('board');
+  document.querySelector('body').appendChild(boardDiv);
 
-    //Adding unicode attribute on small tags
-    tilePlayer.setAttribute('unicode',game.getPlayer().hand.get(i).getHorizontalUnicode());
-    tileComputer.setAttribute('unicode',game.getComputer().hand.get(i).getHorizontalUnicode());
+  for(let p=0;p<game.numPlayers;p++){
+    let player: Player = game.players[p];
+    let playerTilesDiv: HTMLElement = document.createElement('div');//div which contains tile small tags
+    //Adding classes based on type of user for positioning on the board
+    if(player.getType()==='user')
+      playerTilesDiv.classList.add('user');
+    else
+      playerTilesDiv.classList.add('computer'+p);
+    document.querySelector('body').appendChild(playerTilesDiv)
 
-    //Adding click event listener on player's tiles
-    tilePlayer.addEventListener('click', selectTile);
+    for(let t=0;t<game.tilesPerPlayer;t++){
+      //create small tag for tiles and add vertical class to it
+      let tile: HTMLElement = document.createElement('small');
 
-    //Inserting tile unicode into tags
-    tilePlayer.innerHTML = game.getPlayer().hand.get(i).verticalUnicode;
-    tileComputer.innerHTML = game.getComputer().hand.get(i).unknown;
-
-    //adding orientation as class for styling
-    tilePlayer.classList.add('vertical');
-    tileComputer.classList.add('vertical');
-
-    //appending domino tags into divs
-    playerTiles.appendChild(tilePlayer);
-    computerTiles.appendChild(tileComputer);
+      if(player.getType()==='user'){//if the player is a user
+        tile.classList.add('vertical');//tile orientation is vertical
+        //add unicode attribute on player's tiles
+        tile.setAttribute('unicode',player.hand.get(t).getHorizontalUnicode());
+        //Adding click event listener on player's tiles
+        tile.addEventListener('click', selectTile);
+        //Inserting tile unicode into tags
+        tile.innerHTML = player.hand.get(t).verticalUnicode;
+      }
+      else if(player.getType()==='computer'){//if it's a bot (computer)
+        //Inserting tile unicode into tags
+        if(player.getPlayerId()==2){//if it's the bot that stays at the top of the screen (that's computer 2)
+          tile.classList.add('vertical');
+          tile.innerHTML = game.players[p].hand.get(t).unknownVertical;
+        }
+        else{//all other bots
+          tile.classList.add('horizontal');
+          tile.innerHTML = game.players[p].hand.get(t).unknownHorizontal;
+        }
+      }
+      playerTilesDiv.appendChild(tile);
+    }
   }
   //create pass turn btn
   createPassTurnBtn();
-
   //initialize deck div
   updateDeck();
-
 }
 
 //Update methods
 function updateBoard(): void{
   //update div with board every time a tile is added to it!
+  let boardTiles: HTMLElement = document.querySelector('.board');
   boardTiles.innerHTML = '';
   for(let i=0;i<game.board.size();i++){
     let t = document.createElement('small');
@@ -64,24 +77,32 @@ function updateBoard(): void{
   }
 }
 
-function updatePlayerTiles(): void{
-  playerTiles.innerHTML = '';
-  for(let i=0;i<game.getPlayer().hand.size();i++){
+function updateUserTiles(): void{
+  let userTiles: HTMLElement = document.querySelector('.user');
+  userTiles.innerHTML = '';
+  for(let i=0;i<game.getUser().hand.size();i++){
     let t = document.createElement('small');
     t.addEventListener('click', selectTile);
-    t.setAttribute('unicode',game.getPlayer().hand.get(i).getHorizontalUnicode());
+    t.setAttribute('unicode', game.getUser().hand.get(i).getHorizontalUnicode());
     t.classList.add('vertical');
-    t.innerHTML = game.getPlayer().hand.get(i).verticalUnicode;
-    playerTiles.appendChild(t);
+    t.innerHTML = game.getUser().hand.get(i).verticalUnicode;
+    userTiles.appendChild(t);
   }
 }
 
-function updateComputerTiles(){
+function updateComputerTiles(playerId: number){
+  let computerTiles: HTMLElement = document.querySelector('.computer'+playerId);
   computerTiles.innerHTML = '';
-  for(let i=0;i<game.getComputer().hand.size();i++){
+  for(let i=0;i<game.getComputer(playerId).hand.size();i++){
     let t = document.createElement('small');
-    t.classList.add('vertical');
-    t.innerHTML = game.getComputer().hand.get(i).unknown;
+    if(playerId === 2){
+      t.classList.add('vertical');
+      t.innerHTML = game.getComputer(playerId).hand.get(i).unknownVertical;
+    }
+    else{
+      t.classList.add('horizontal');
+      t.innerHTML = game.getComputer(playerId).hand.get(i).unknownHorizontal;
+    }
     computerTiles.appendChild(t);
   }
 }
@@ -145,4 +166,4 @@ function clearAndReturnButtonsDiv(): Element{
 }
 
 
-export {createPlayersHand, updatePlayerTiles, updateComputerTiles, updateBoard, updateDeck, clearAndReturnButtonsDiv};
+export {createBoard, updateUserTiles, updateComputerTiles, updateBoard, updateDeck, clearAndReturnButtonsDiv};

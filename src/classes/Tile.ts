@@ -2,8 +2,8 @@ export class Tile{
   //CONSTANTS
   private horizontalStart = 127025;
   private verticalStart = 127075;
-  public unknown: string = '&#127074;'; //unicode for unknown domino tile (useful for opponent)
-
+  public unknownVertical: string = '&#127074;'; //unicode for unknown domino tile (useful for opponent)
+  public unknownHorizontal: string = '&#127024;'
   //PUBLIC ATTRIBUTES
   public first: number; //leftmost value while horizontal and upmost value while vertical
   public last: number; //rightmost value while horizontal and bottommost value while vertical

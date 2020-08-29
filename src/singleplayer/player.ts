@@ -1,6 +1,6 @@
 import {Tile} from '../classes/Tile.js';
 import {computerMove} from './computer.js';
-import {updatePlayerTiles, updateBoard, updateDeck, clearAndReturnButtonsDiv} from './events.js';
+import {updateUserTiles, updateBoard, updateDeck, clearAndReturnButtonsDiv} from './events.js';
 import {game} from './main.js';
 
 
@@ -14,22 +14,22 @@ function playerMove(e: MouseEvent){
   if(validSide != 'both' && validSide != side){//to prevent previous valid selected tile to be added after board is updated
     alert('not a valid move');
   }
-  else if (!game.getPlayer().isEqual(game.getTurn())){
+  else if (!game.getUser().isEqual(game.getTurn())){
     alert('not your turn');
   }
   else{
-    let tileRemoved: Tile = game.players[0].hand.removeTile(tile);
+    let tileRemoved: Tile = game.getUser().hand.removeTile(tile);
     game.board.makePlay(tileRemoved,side);
     clearAndReturnButtonsDiv();
     updateBoard();
-    updatePlayerTiles();
+    updateUserTiles();
     game.passTurn();
     computerMove();
   }
 }
 
 function passTurn(){
-  if(game.getTurn().isEqual(game.getPlayer())){//only passing turn if it's player's turn
+  if(game.getTurn().isEqual(game.getUser())){//only passing turn if it's player's turn
     game.passTurn()
     alert('you passed your turn');
     computerMove();
@@ -40,11 +40,11 @@ function passTurn(){
 }
 
 //When request for more tiles from the deck is made
-function getTileFromDeck(e: MouseEvent){
-  if(game.getPlayer().isEqual(game.getTurn())){
+function getTileFromDeck(){
+  if(game.getUser().isEqual(game.getTurn())){
     let tile: Tile = game.deck.removeFirstTile();//remove tile from deck
-    game.getPlayer().hand.addTile(tile);//add tile to player's hand
-    updatePlayerTiles();//update hand
+    game.getUser().hand.addTile(tile);//add tile to player's hand
+    updateUserTiles();//update hand
     updateDeck();
   }
   else

@@ -10,31 +10,46 @@ export class Game{
   public board: Board;
   public deck: Deck;
   public players: Player[];
+  public numPlayers: number; //number of players playing the game
+  public tilesPerPlayer: number; //number of domino tiles distributed to each player
 
   //Private attributes
-  private numPlayers: number = 2; //number of players playing the game
-  private tilesPerPlayer: number = 4; //number of domino tiles distributed to each player
   private turnIndex: number; //stores index of player in the players array that has to play now
 
-  constructor(players: Player[]){
+  constructor(numPlayers: number, tilesPerPlayer: number, players: Player[]){
+    this.numPlayers = numPlayers;
+    this.tilesPerPlayer = tilesPerPlayer;
     this.board = new Board();
     this.deck = new Deck();
     this.generateAllTiles();
     this.deck.sortTiles();
     //Adding players
     this.players = players;
-
     //setting hand for each player
     this.setPlayersHand();
-
     //choosing a random player (turn initial value is a number between 0 and players.length) to start game
     this.turnIndex = Math.floor(Math.random()*this.players.length);
   }
-  public getPlayer(): Player{
-    return this.players[0];
+
+  //Finds user among players array using the type attribute (right now there is only one, so it doesn't halp that much)
+  public getUser(): Player{
+    for(let i=0;i<this.numPlayers;i++){
+      if(this.players[i].getType() === 'user'){
+        return this.players[i];
+      }
+    }
   }
-  public getComputer(): Player{
-    return this.players[1];
+
+  public getComputer(playerId: number): Player{
+    for(let i=0;i<this.numPlayers;i++){
+      if(this.players[i].getPlayerId()===playerId){
+        return this.players[i];
+      }
+    }
+  }
+
+  public isComputer(p: Player): boolean{
+    return p.getPlayerId() > 0; //temporary solution, improve later
   }
   //Method that updates the turn attribute
   public passTurn(): void{

@@ -44,7 +44,6 @@ export class Board{
       if(this.left != null && tile.last != this.left){
         tile.flipHorizontally();
       }
-
       this.left = tile.first;
       this.addLeft(tile);
     }
