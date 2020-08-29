@@ -1,4 +1,4 @@
-# Dominow - play the game domino on you browser!
+# Play the game Dominoes on you browser!
 
 ## Demo
 The demo for the project be added soon...
@@ -7,11 +7,11 @@ The demo for the project be added soon...
 
 Clone the repository:
 
-`git clone https://github.com/wvict/dominow.git`
+`git clone https://github.com/wvict/dominoes.git`
 
-Enter the `dominow` folder and compile the javascript files unsing the Typescript compiler:
+Enter the `dominoes` folder and compile the javascript files unsing the Typescript compiler:
 ```
-cd dominow
+cd dominoes
 tsc
 ```
 
