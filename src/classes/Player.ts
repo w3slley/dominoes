@@ -31,6 +31,6 @@ export class Player{
   }
 
   isEqual(p: Player): boolean{
-    return this.playerId == p.playerId; //later I'll have to think on a more precise comparison between players
+    return this.playerId == p.getPlayerId(); //later I'll have to think on a more precise comparison between players
   }
 }

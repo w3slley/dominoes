@@ -10,6 +10,7 @@ export class Game{
   public board: Board;
   public deck: Deck;
   public players: Player[];
+  public winners: Player[]; //stores winners (player at position 0 won first, player at position 1 won second and so on)
   public numPlayers: number; //number of players playing the game
   public tilesPerPlayer: number; //number of domino tiles distributed to each player
 
@@ -23,12 +24,13 @@ export class Game{
     this.deck = new Deck();
     this.generateAllTiles();
     this.deck.sortTiles();
-    //Adding players
+    //Adding players and initializing winners array
     this.players = players;
+    this.winners = [];
     //setting hand for each player
     this.setPlayersHand();
     //choosing a random player (turn initial value is a number between 0 and players.length) to start game
-    this.turnIndex = Math.floor(Math.random()*this.players.length);
+    this.turnIndex = Math.round(Math.random()*(this.players.length-1));
   }
 
   //Finds user among players array using the type attribute (right now there is only one, so it doesn't halp that much)
@@ -40,7 +42,7 @@ export class Game{
     }
   }
 
-  public getComputer(playerId: number): Player{
+  public getPlayer(playerId: number): Player{
     for(let i=0;i<this.numPlayers;i++){
       if(this.players[i].getPlayerId()===playerId){
         return this.players[i];
@@ -51,6 +53,7 @@ export class Game{
   public isComputer(p: Player): boolean{
     return p.getPlayerId() > 0; //temporary solution, improve later
   }
+
   //Method that updates the turn attribute
   public passTurn(): void{
     if(this.turnIndex == this.players.length - 1)
@@ -63,6 +66,25 @@ export class Game{
     return this.players[this.turnIndex];
   }
 
+  public addWinner(playerId: number): void{
+    let player = this.getPlayer(playerId);
+    this.removePlayer(player);
+    this.winners.push(player);
+    //adjusting turnIndex when player with last index wins the game
+    if(this.turnIndex===this.players.length){
+      this.turnIndex = 0;
+    }
+  }
+
+  private removePlayer(p: Player): void{
+    for(let i=0;i<this.players.length;i++){
+      if(this.players[i].isEqual(p)){
+        this.players.splice(i,1);
+        return;
+      }
+    }
+  }
+
   private setPlayersHand(): void{
     for(let i=0;i<this.numPlayers;i++){//loop through all players
       let h: Hand = new Hand();
@@ -72,6 +94,7 @@ export class Game{
       this.players[i].setHand(h); //set their domino hand
     }
   }
+
 
   private generateAllTiles(): void{
     for(let i=0,j=0;j<28;i++,j++){

@@ -22,13 +22,12 @@ function createBoard(): void{
     if(player.getType()==='user')
       playerTilesDiv.classList.add('user');
     else
-      playerTilesDiv.classList.add('computer'+p);
+      playerTilesDiv.classList.add('computer'+player.getPlayerId());
     document.querySelector('body').appendChild(playerTilesDiv)
 
     for(let t=0;t<game.tilesPerPlayer;t++){
       //create small tag for tiles and add vertical class to it
       let tile: HTMLElement = document.createElement('small');
-
       if(player.getType()==='user'){//if the player is a user
         tile.classList.add('vertical');//tile orientation is vertical
         //add unicode attribute on player's tiles
@@ -39,14 +38,22 @@ function createBoard(): void{
         tile.innerHTML = player.hand.get(t).verticalUnicode;
       }
       else if(player.getType()==='computer'){//if it's a bot (computer)
-        //Inserting tile unicode into tags
-        if(player.getPlayerId()==2){//if it's the bot that stays at the top of the screen (that's computer 2)
+        //If user plays against only one computer
+        if(game.numPlayers===2){
           tile.classList.add('vertical');
           tile.innerHTML = game.players[p].hand.get(t).unknownVertical;
         }
-        else{//all other bots
-          tile.classList.add('horizontal');
-          tile.innerHTML = game.players[p].hand.get(t).unknownHorizontal;
+        //If user plays against 3 computer players
+        else if(game.numPlayers===4){
+          //Inserting tile unicode into tags
+          if(player.getPlayerId()==2){//if it's the bot that stays at the top of the screen (that's computer 2)
+            tile.classList.add('vertical');
+            tile.innerHTML = game.players[p].hand.get(t).unknownVertical;
+          }
+          else{//all other bots
+            tile.classList.add('horizontal');
+            tile.innerHTML = game.players[p].hand.get(t).unknownHorizontal;
+          }
         }
       }
       playerTilesDiv.appendChild(tile);
@@ -93,15 +100,15 @@ function updateUserTiles(): void{
 function updateComputerTiles(playerId: number){
   let computerTiles: HTMLElement = document.querySelector('.computer'+playerId);
   computerTiles.innerHTML = '';
-  for(let i=0;i<game.getComputer(playerId).hand.size();i++){
+  for(let i=0;i<game.getPlayer(playerId).hand.size();i++){
     let t = document.createElement('small');
     if(playerId === 2){
       t.classList.add('vertical');
-      t.innerHTML = game.getComputer(playerId).hand.get(i).unknownVertical;
+      t.innerHTML = game.getPlayer(playerId).hand.get(i).unknownVertical;
     }
     else{
       t.classList.add('horizontal');
-      t.innerHTML = game.getComputer(playerId).hand.get(i).unknownHorizontal;
+      t.innerHTML = game.getPlayer(playerId).hand.get(i).unknownHorizontal;
     }
     computerTiles.appendChild(t);
   }
@@ -119,6 +126,21 @@ function createPassTurnBtn(): void{
   div.innerHTML = 'Pass turn';
   div.addEventListener('click', passTurn);
   div.style.display = 'block';
+}
+
+function updateWinnerTiles(playerId: number): void{
+  let playerHand: HTMLElement;
+  if(playerId === game.getUser().getPlayerId()){
+      playerHand = document.querySelector('.user');
+      //removing user buttons from screen
+      let btns = document.querySelector('.player-buttons');
+      //btns.remove();
+      btns.innerHTML = '';
+  }
+  else
+    playerHand = document.querySelector('.computer'+playerId);
+  //change player's html hand
+  playerHand.innerHTML = "WON";
 }
 
 //Event listeners
@@ -166,4 +188,4 @@ function clearAndReturnButtonsDiv(): Element{
 }
 
 
-export {createBoard, updateUserTiles, updateComputerTiles, updateBoard, updateDeck, clearAndReturnButtonsDiv};
+export {createBoard, updateUserTiles, updateComputerTiles, updateBoard, updateDeck, updateWinnerTiles, clearAndReturnButtonsDiv};

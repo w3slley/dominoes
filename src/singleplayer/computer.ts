@@ -1,10 +1,15 @@
 import {Tile} from '../classes/Tile.js';
 import {Hand} from '../classes/Hand.js';
 import {Player} from '../classes/Player.js';
-import {updateComputerTiles, updateBoard, updateDeck} from './events.js';
+import {updateComputerTiles, updateBoard, updateDeck, updateWinnerTiles} from './events.js';
 import {game} from './main.js';
-//to generalize a computer move for multiple users (non-player), this function could become a method inside the player class taking as input a game object and the id of the player (right now is only the array index but later could become a more unique number)
+
 async function computerMove(){
+  //When there is only one player left (the user), this player lost the game (i.e was last to win)
+  if(game.players.length === 1){
+    alert('You have lost the game!');
+    return;
+  }
   //Base case - when it's the user's turn again, get out of function.
   if(game.getTurn() == game.getUser()){
     return;
@@ -14,9 +19,16 @@ async function computerMove(){
   for(let i=0;i<computerHand.size();i++){
     let tile: Tile = computerHand.get(i);
     let computerPlay = game.board.isMoveValid(tile);
-
     if(computerPlay.result){//if it's a valid tile
       await playTile(tile, computerPlay.side);
+      //if player doesn't have any more domino tiles, then they won the game
+      if(computerHand.size()===0){
+        let playerId = game.getTurn().getPlayerId();
+        game.addWinner(playerId);
+        updateWinnerTiles(playerId);
+        computerMove();
+        return;
+      }
       game.passTurn();
       computerMove();
       return;
@@ -41,29 +53,30 @@ async function computerMove(){
   else{
     alert('Computer doesn\'t have any tiles to play and deck is empty!');
   }
-  game.passTurn(); //pass turn at the end
+
+  game.passTurn();
   computerMove();
 }
 
-//Functions that return promises that sleep for 2 seconds so that computer move is not instantaneous
+//Functions that return promises that sleep for 1.5 seconds so that computer move is not instantaneous
 function addTileToHand(tile: Tile): Promise<string>{
   return new Promise(resolve=>setTimeout(()=>{
     game.getTurn().hand.addTile(tile);//add tile to computer's hand
     updateComputerTiles(game.getTurn().getPlayerId());
     updateDeck();
     resolve('ok');
-  },2000));
+  },1500));
 }
 
 function playTile(tile: Tile, side: string): Promise<string>{
   return new Promise(resolve=>setTimeout(()=>{
     let computerId = game.getTurn().getPlayerId()
-    game.getComputer(computerId).hand.removeTile(tile);//removing tile from computer hand
+    game.getPlayer(computerId).hand.removeTile(tile);//removing tile from computer hand
     game.board.makePlay(tile, side);//add tile to the board
     updateComputerTiles(computerId);
     updateBoard();
     resolve('ok');
-  },2000));
+  },1500));
 }
 
 export {computerMove};
