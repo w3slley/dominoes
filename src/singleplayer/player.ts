@@ -28,7 +28,7 @@ function playerMove(e: MouseEvent): void{
       game.addWinner(playerId);
       let place = game.winners.length;
       alert('Won on '+place+' position!');
-      alert('Display buttons to play again')
+      alert('Display buttons to play again');
     }
     else{
       clearAndReturnButtonsDiv();

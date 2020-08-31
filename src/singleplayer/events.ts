@@ -10,19 +10,26 @@ import {game} from './main.js';
 */
 
 function createBoard(): void{
-  //systematize this function to n players!
+  //adding board div to document
   let boardDiv: HTMLElement = document.createElement('div');
   boardDiv.classList.add('board');
   document.querySelector('body').appendChild(boardDiv);
-
+  //creating the hand of each user
   for(let p=0;p<game.numPlayers;p++){
     let player: Player = game.players[p];
     let playerTilesDiv: HTMLElement = document.createElement('div');//div which contains tile small tags
     //Adding classes based on type of user for positioning on the board
-    if(player.getType()==='user')
+    if(player.getType()==='user'){
       playerTilesDiv.classList.add('user');
-    else
+    }
+    else{
       playerTilesDiv.classList.add('computer'+player.getPlayerId());
+    }
+    //adding player name into div
+    let playerName: HTMLElement = document.createElement('p');
+    playerName.innerHTML = player.getName();
+    playerTilesDiv.appendChild(playerName);
+    //adding player hand div into html body
     document.querySelector('body').appendChild(playerTilesDiv)
 
     for(let t=0;t<game.tilesPerPlayer;t++){
@@ -85,30 +92,42 @@ function updateBoard(): void{
 }
 
 function updateUserTiles(): void{
+  let user: Player = game.getUser();
   let userTiles: HTMLElement = document.querySelector('.user');
   userTiles.innerHTML = '';
-  for(let i=0;i<game.getUser().hand.size();i++){
+  //adding player name into div
+  let playerName: HTMLElement = document.createElement('p');
+  playerName.innerHTML = user.getName();
+  userTiles.appendChild(playerName);
+
+  for(let i=0;i<user.hand.size();i++){
     let t = document.createElement('small');
     t.addEventListener('click', selectTile);
-    t.setAttribute('unicode', game.getUser().hand.get(i).getHorizontalUnicode());
+    t.setAttribute('unicode', user.hand.get(i).getHorizontalUnicode());
     t.classList.add('vertical');
-    t.innerHTML = game.getUser().hand.get(i).verticalUnicode;
+    t.innerHTML = user.hand.get(i).verticalUnicode;
     userTiles.appendChild(t);
   }
 }
 
 function updateComputerTiles(playerId: number){
+  let computerPlayer: Player = game.getPlayer(playerId);
   let computerTiles: HTMLElement = document.querySelector('.computer'+playerId);
   computerTiles.innerHTML = '';
-  for(let i=0;i<game.getPlayer(playerId).hand.size();i++){
+  //adding player name into div
+  let playerName: HTMLElement = document.createElement('p');
+  playerName.innerHTML = computerPlayer.getName();
+  computerTiles.appendChild(playerName);
+
+  for(let i=0;i<computerPlayer.hand.size();i++){
     let t = document.createElement('small');
     if(playerId === 2){
       t.classList.add('vertical');
-      t.innerHTML = game.getPlayer(playerId).hand.get(i).unknownVertical;
+      t.innerHTML = computerPlayer.hand.get(i).unknownVertical;
     }
     else{
       t.classList.add('horizontal');
-      t.innerHTML = game.getPlayer(playerId).hand.get(i).unknownHorizontal;
+      t.innerHTML = computerPlayer.hand.get(i).unknownHorizontal;
     }
     computerTiles.appendChild(t);
   }
