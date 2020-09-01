@@ -1,4 +1,5 @@
 *.txt
 *.webp
-node_modules
+videos/
+node_modules/
 public/assets/js/

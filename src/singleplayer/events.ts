@@ -1,5 +1,4 @@
 import {Tile} from '../classes/Tile.js';
-import {Hand} from '../classes/Hand.js';
 import {Player} from '../classes/Player.js';
 import {playerMove, getTileFromDeck, passPlayerTurn} from './player.js';
 import {game} from './main.js';

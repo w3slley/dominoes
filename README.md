@@ -1,21 +1,25 @@
 # Play the game Dominoes on you browser!
 
 ## Demo
-The demo for the project be added soon...
+The demo for the project will be added soon...
 
 ## Usage
 
 Clone the repository:
-
-`git clone https://github.com/wvict/dominoes.git`
-
-Enter the `dominoes` folder and compile the javascript files unsing the Typescript compiler:
 ```
-cd dominoes
+git clone https://github.com/w3slley/dominoes.git
+```
+
+`cd` into the folder `dominoes` and install the required npm dependencies:
+```
+npm install
+```
+Compile the TypeScript files into JavaScript:
+```
 tsc
 ```
 
 Go to `localhost:3000` and you are good to go!
 
 ## To Do:
-- Implement testing;
+- Implement testing
