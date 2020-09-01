@@ -1,7 +1,7 @@
 import {Tile} from '../classes/Tile.js';
 import {Hand} from '../classes/Hand.js';
 import {Player} from '../classes/Player.js';
-import {playerMove, getTileFromDeck, passTurn} from './player.js';
+import {playerMove, getTileFromDeck, passPlayerTurn} from './player.js';
 import {game} from './main.js';
 
 
@@ -27,6 +27,7 @@ function createBoard(): void{
     }
     //adding player name into div
     let playerName: HTMLElement = document.createElement('p');
+    playerName.classList.add(player.getName());
     playerName.innerHTML = player.getName();
     playerTilesDiv.appendChild(playerName);
     //adding player hand div into html body
@@ -97,8 +98,10 @@ function updateUserTiles(): void{
   userTiles.innerHTML = '';
   //adding player name into div
   let playerName: HTMLElement = document.createElement('p');
+  playerName.classList.add(user.getName());
   playerName.innerHTML = user.getName();
   userTiles.appendChild(playerName);
+  highlightCurrentTurn();
 
   for(let i=0;i<user.hand.size();i++){
     let t = document.createElement('small');
@@ -116,8 +119,10 @@ function updateComputerTiles(playerId: number){
   computerTiles.innerHTML = '';
   //adding player name into div
   let playerName: HTMLElement = document.createElement('p');
+  playerName.classList.add(computerPlayer.getName());
   playerName.innerHTML = computerPlayer.getName();
   computerTiles.appendChild(playerName);
+  highlightCurrentTurn();
 
   for(let i=0;i<computerPlayer.hand.size();i++){
     let t = document.createElement('small');
@@ -143,7 +148,7 @@ function updateDeck(): void{
 function createPassTurnBtn(): void{
   let div: HTMLElement = document.querySelector('.pass-turn');
   div.innerHTML = 'Pass turn';
-  div.addEventListener('click', passTurn);
+  div.addEventListener('click', passPlayerTurn);
   div.style.display = 'block';
 }
 
@@ -162,15 +167,28 @@ function updateWinnerTiles(playerId: number): void{
   playerHand.innerHTML = "WON";
 }
 
+//function that highlights players' name when they pass their turn
+function highlightNextTurn(): void{
+  let previousPlayer: HTMLElement = document.querySelector('.'+game.getTurn().getName());
+  let currentPlayer: HTMLElement = document.querySelector('.'+game.getNextTurn().getName());
+  previousPlayer.style.border = 'none';
+  currentPlayer.style.border = '3px solid rgba(20,130,255,.7)';
+}
+
+//function that highlights player's name when it's they turn to play
+function highlightCurrentTurn(): void{
+  //maintaining player name highlighted
+  let playerName: HTMLElement = document.querySelector('.'+game.getTurn().getName());
+  playerName.style.border = '3px solid rgba(20,130,255,.7)';
+}
+
 //Event listeners
 function selectTile(e: MouseEvent): void{
   let btn: Element = clearAndReturnButtonsDiv();
-
   let element = e.currentTarget as HTMLElement;//currentTarget has to have a type HTMLElement (Not all element with type HTMLElement has the method getAttribute() - that's why I was getting that error)
   let horizontalUnicode: string = element.getAttribute('unicode');
   let left: HTMLButtonElement = document.createElement('button');
   let right: HTMLButtonElement = document.createElement('button');
-
   //setting attributes on side buttons
   //left button
   left.classList.add('left');
@@ -182,7 +200,6 @@ function selectTile(e: MouseEvent): void{
   right.setAttribute('horizontal-unicode', horizontalUnicode);
   right.addEventListener('click', playerMove);
   right.innerHTML = 'Add Right';
-
   //checking if current tile can be used
   let tile: Tile = new Tile(horizontalUnicode);
   let play = game.board.isMoveValid(tile);
@@ -207,4 +224,4 @@ function clearAndReturnButtonsDiv(): Element{
 }
 
 
-export {createBoard, updateUserTiles, updateComputerTiles, updateBoard, updateDeck, updateWinnerTiles, clearAndReturnButtonsDiv};
+export {createBoard, updateUserTiles, updateComputerTiles, updateBoard, updateDeck, highlightCurrentTurn, highlightNextTurn, updateWinnerTiles, clearAndReturnButtonsDiv};

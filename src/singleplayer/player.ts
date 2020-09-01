@@ -1,10 +1,11 @@
 import {Tile} from '../classes/Tile.js';
 import {computerMove} from './computer.js';
-import {updateUserTiles, updateBoard, updateDeck, updateWinnerTiles, clearAndReturnButtonsDiv} from './events.js';
+import {updateUserTiles, updateBoard, updateDeck, highlightNextTurn, updateWinnerTiles, clearAndReturnButtonsDiv} from './events.js';
 import {game} from './main.js';
 
 
 function playerMove(e: MouseEvent): void{
+  let user = game.getUser();
   let element = e.currentTarget as HTMLElement;
   let side: string = element.classList.value;
   let horizontalUnicode: string = element.getAttribute('horizontal-unicode');
@@ -18,7 +19,6 @@ function playerMove(e: MouseEvent): void{
     alert('Not your turn!');
   }
   else{
-    let user = game.getUser();
     let tileRemoved: Tile = user.hand.removeTile(tile);
     game.board.makePlay(tileRemoved,side);
     //When user wins the game, game is over!
@@ -27,28 +27,32 @@ function playerMove(e: MouseEvent): void{
       updateWinnerTiles(playerId);
       game.addWinner(playerId);
       let place = game.winners.length;
-      alert('Won on '+place+' position!');
+      if(place == 1){
+        alert('You have won the game!');
+      }
+      else{
+        alert('Won on '+place+' position!');
+      }
       alert('Display buttons to play again');
+      window.location.href = '/';//temporary
     }
     else{
-      clearAndReturnButtonsDiv();
-      updateBoard();
-      updateUserTiles();
-      game.passTurn();
-      computerMove();
+      clearAndReturnButtonsDiv();//remove all user butons to add tiles to board
+      updateBoard();//cleans board and updates it (html) with the new tiles
+      updateUserTiles();//cleans user hand and updates it (adds or removes tiles)
+      passPlayerTurn();//reusing function used in deck event listener
     }
-
   }
 }
 
-function passTurn(): void{
+function passPlayerTurn(): void{
   if(game.getTurn().isEqual(game.getUser())){//only passing turn if it's player's turn
-    game.passTurn()
-    alert('you passed your turn');
-    computerMove();
+    highlightNextTurn();//highlights next player's name and remove highlighting on the current one
+    game.passTurn();//passes the turn
+    computerMove();//computer makes its mode
   }
   else{
-    alert('not your turn');
+    alert('Not your turn!');
   }
 }
 
@@ -69,4 +73,4 @@ function getTileFromDeck(): void{
 
 }
 
-export {playerMove, getTileFromDeck, passTurn};
+export {playerMove, getTileFromDeck, passPlayerTurn};

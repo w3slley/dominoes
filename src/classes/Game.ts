@@ -66,6 +66,13 @@ export class Game{
     return this.players[this.turnIndex];
   }
 
+  public getNextTurn(): Player{
+    if(this.turnIndex + 1 == this.players.length)
+      return this.players[0];
+    else
+      return this.players[this.turnIndex+1];
+  }
+
   public addWinner(playerId: number): void{
     let player = this.getPlayer(playerId);
     this.removePlayer(player);

@@ -1,6 +1,6 @@
 import {Game} from '../classes/Game.js';
 import {Player} from '../classes/Player.js';
-import {createBoard} from './events.js';
+import {createBoard, highlightCurrentTurn} from './events.js';
 import {computerMove} from './computer.js';
 
 //Configurations for the game
@@ -19,9 +19,10 @@ for(let i=0;i<numPlayers;i++){
 }
 
 let game: Game = new Game(numPlayers, tilesPerPlayer, players);
-
+//creates board and all necessary components of the game
 createBoard();
-
+//highlighing first player's name
+highlightCurrentTurn();
 //if computer starts the game
 if(game.isComputer(game.getTurn())){
   computerMove();

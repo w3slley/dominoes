@@ -1,7 +1,6 @@
 import {Tile} from '../classes/Tile.js';
 import {Hand} from '../classes/Hand.js';
-import {Player} from '../classes/Player.js';
-import {updateComputerTiles, updateBoard, updateDeck, updateWinnerTiles} from './events.js';
+import {updateComputerTiles, updateBoard, updateDeck, highlightCurrentTurn, highlightNextTurn, updateWinnerTiles} from './events.js';
 import {game} from './main.js';
 
 async function computerMove(){
@@ -23,14 +22,14 @@ async function computerMove(){
       await playTile(tile, computerPlay.side);
       //if player doesn't have any more domino tiles, then they won the game
       if(computerHand.size()===0){
-        let playerId = game.getTurn().getPlayerId();
+        let playerId: number = game.getTurn().getPlayerId();
         game.addWinner(playerId);
         updateWinnerTiles(playerId);
+        highlightCurrentTurn();//simply highlights the name of player that has the turn
         computerMove();
         return;
       }
-      game.passTurn();
-      computerMove();
+      passComputerTurn();
       return;
     }
   }
@@ -45,15 +44,24 @@ async function computerMove(){
       await addTileToHand(tile);
     }
 
-    if(game.deck.size()==0)
-      alert('Computer doesn\'t have any tiles to play and deck is empty!');
+    if(game.deck.size()==0){
+      await wait();
+      console.log('Computer doesn\'t have any tiles to play and deck is empty!');
+    }
+
     else
       await playTile(tile, game.board.isMoveValid(tile).side);
   }
   else{
-    alert('Computer doesn\'t have any tiles to play and deck is empty!');
+    await wait();
+    console.log('Computer doesn\'t have any tiles to play and deck is empty!');
   }
+  passComputerTurn();
+}
 
+//function that takes care of passing turn of computer
+function passComputerTurn(): void{
+  highlightNextTurn();
   game.passTurn();
   computerMove();
 }
@@ -70,13 +78,20 @@ function addTileToHand(tile: Tile): Promise<string>{
 
 function playTile(tile: Tile, side: string): Promise<string>{
   return new Promise(resolve=>setTimeout(()=>{
-    let computerId = game.getTurn().getPlayerId()
+    let computerId: number = game.getTurn().getPlayerId()
     game.getPlayer(computerId).hand.removeTile(tile);//removing tile from computer hand
     game.board.makePlay(tile, side);//add tile to the board
     updateComputerTiles(computerId);
     updateBoard();
     resolve('ok');
   },1500));
+}
+
+//method used for waiting when computer doesn't have tile and deck is empty - so that it doesn't look like the turn was simply jumped from one player to the one after the next
+function wait():Promise<string>{
+  return new Promise(resolve=>setTimeout(()=>{
+    resolve('ok');
+  }, 1500));
 }
 
 export {computerMove};
