@@ -19,7 +19,7 @@ Compile the TypeScript files into JavaScript:
 tsc
 ```
 
-Go to `localhost:3000` and you are good to go!
+Start the server with `nodemon`, go to `localhost:3000` and you are good to go!
 
 ## To Do:
 - Implement testing
