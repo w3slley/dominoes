@@ -34,7 +34,7 @@ function playerMove(e: MouseEvent): void{
         alert('Won on '+place+' position!');
       }
       alert('Display buttons to play again');
-      window.location.href = '/';//temporary
+      window.location.href = '/singleplayer';//temporary
     }
     else{
       clearAndReturnButtonsDiv();//remove all user butons to add tiles to board

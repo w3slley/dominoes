@@ -2,9 +2,12 @@ const express = require('express');
 const app = express();
 
 app.use(express.static(__dirname+'/'));
-app.get('/',(req, res)=>{
-  res.sendFile(__dirname+'/public/index.html');
-})
+app.get('/singleplayer',(req, res)=>{
+  res.sendFile(__dirname+'/public/singleplayer.html');
+});
+app.get('/multiplayer',(req, res)=>{
+  res.sendFile(__dirname+'/public/multiplayer.html');
+});
 
 
 app.listen('3000',()=>{

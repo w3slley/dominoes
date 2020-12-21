@@ -19,7 +19,7 @@ Compile the TypeScript files into JavaScript:
 tsc
 ```
 
-Start the server with `nodemon`, go to `localhost:3000` and you are good to go!
+Start the server with `nodemon` and go to `localhost:3000/singleplayer` to play the singleplayer mode! The multiplayer mode is currently under development.
 
 ## To Do:
 - Implement testing
