@@ -1,5 +1,7 @@
 # Play the game Dominoes on you browser!
 
+![dominoes-img](https://imgur.com/Bf9LHXb.png)
+
 ## Demo
 The demo for the project will be added soon...
 
